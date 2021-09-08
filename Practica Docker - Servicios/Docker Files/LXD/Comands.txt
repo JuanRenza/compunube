@@ -1,0 +1,17 @@
+lxc launch ubuntu-daily:16.04 docker -c security.nesting=true
+
+lxc exec docker -- apt update
+lxc exec docker -- apt dist-upgrade -y
+lxc exec docker -- apt install docker.io -y
+
+lxc config set docker security.privileged true
+lxc restart docker
+
+lxc exec docker -- docker run --detach --name app carinamarina/hello-world-app
+lxc exec docker -- docker run --detach --name web --link app:helloapp -p 80:5000 carinamarina/hello-world-web
+
+lxc list
+
+
+
+
